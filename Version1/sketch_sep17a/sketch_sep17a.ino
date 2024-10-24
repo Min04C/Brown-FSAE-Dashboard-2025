@@ -10,7 +10,7 @@
 #define MOSI_Pin 11 // might need to rename w/ new update: MOSI -> COPI
 #define CS_Pin 10 
 #define SCK_Pin 13
-#define INTRPT_Pin 0 // or 9
+#define INTRPT_Pin 9 // or 0
 
 // Introduce the variables (data metrics)
 float voltage;
@@ -65,6 +65,7 @@ void onReceive(int packetSize) {
   // received a packet
   Serial.println("onReceived function opened packet ID: ");
   Serial.println(CAN.packetId());
+  /*
   // PACKETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
   if(CAN.packetId() == 0x701) {
     Serial.print("VOLTAGEEEEEE");
@@ -106,12 +107,13 @@ void onReceive(int packetSize) {
           i++;
         }
       }
-      // Serial.println();
-      // Serial.print(t.number);
+      Serial.println();
+      Serial.print(t.number);
       voltage = t.number;
-      // Serial.println();
+      Serial.println();
     }
-    // Serial.println();
+    Serial.println();
+    */
   }
   // PACKETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
   if(CAN.packetId() == 0x700) {
