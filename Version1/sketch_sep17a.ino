@@ -63,9 +63,11 @@ void loop() {
 
 void onReceive(int packetSize) {
   // received a packet
-  //// // Serial.println("hello");
-  // Serial.println(CAN.packetId());
+  Serial.println("onReceived function opened packet ID: ");
+  Serial.println(CAN.packetId());
+  // PACKETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
   if(CAN.packetId() == 0x701) {
+    Serial.print("VOLTAGEEEEEE");
     Serial.print("Received at 0x701");
     
     if (CAN.packetExtended()) {
@@ -75,10 +77,12 @@ void onReceive(int packetSize) {
       // Remote transmission request, packet contains no data
       Serial.print("RTR ");
     }
+    
     Serial.print("packet with id ");
     Serial.print(CAN.packetId());
     Serial.print(" and as hex ");
     Serial.print(CAN.packetId(), HEX);
+    
     if (CAN.packetRtr()) {
       Serial.print(" and requested length ");
       Serial.println(CAN.packetDlc());
@@ -109,7 +113,9 @@ void onReceive(int packetSize) {
     }
     // Serial.println();
   }
+  // PACKETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
   if(CAN.packetId() == 0x700) {
+    Serial.print("COOLTEMPPPPPPPP");
     Serial.print("Received at 0x700");
     if (CAN.packetExtended()) {
       // Serial.print("extended ");
@@ -151,7 +157,9 @@ void onReceive(int packetSize) {
     }
     // Serial.println();
   }
+  // PACKETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
   if(CAN.packetId() == 0x702) {
+    Serial.print("ENGNSPEEDDDDDDD");
     // Serial.print("Received ");
     if (CAN.packetExtended()) {
       // Serial.print("extended ");
@@ -193,7 +201,9 @@ void onReceive(int packetSize) {
     }
     // Serial.println();
   }
+  // PACKETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
   if(CAN.packetId() == 0x703) {
+    Serial.print("WHEELSPEEDDDDDD");
     // Serial.print("Received ");
     if (CAN.packetExtended()) {
       // Serial.print("extended ");
