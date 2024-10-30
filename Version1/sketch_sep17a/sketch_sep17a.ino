@@ -113,28 +113,32 @@ void onReceive(int packetSize) {
       Serial.println();
     }
     Serial.println();
-    */
   }
+  */
+  /*
   // PACKETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
   if(CAN.packetId() == 0x700) {
     Serial.print("COOLTEMPPPPPPPP");
     Serial.print("Received at 0x700");
     if (CAN.packetExtended()) {
-      // Serial.print("extended ");
+      Serial.print("extended ");
     }
     if (CAN.packetRtr()) {
       // Remote transmission request, packet contains no data
-      // Serial.print("RTR ");
+      Serial.print("RTR ");
     }
-    // Serial.print("packet with id ");
-    // Serial.print(CAN.packetId());
-    //// Serial.print(CAN.packetId(), HEX);
+      
+    Serial.print("packet with id ");
+    Serial.print(CAN.packetId());
+    Serial.print(" and as hex ");
+    Serial.print(CAN.packetId(), HEX);
+
     if (CAN.packetRtr()) {
-      // Serial.print(" and requested length ");
-      // Serial.println(CAN.packetDlc());
+      Serial.print(" and requested length ");
+      Serial.println(CAN.packetDlc());
     } else {
-      // Serial.print(" and length ");
-      // Serial.println(packetSize);
+      Serial.print(" and length ");
+      Serial.println(packetSize);
       // only print packet data for non-RTR packets
       union data {
         uint32_t bits;
@@ -147,38 +151,44 @@ void onReceive(int packetSize) {
         uint32_t j = CAN.read();
         if(i < 4) {
           t.bits = (t.bits << 8) + j;
-          // Serial.print(j,HEX);
-          // Serial.print(" ");
+          Serial.print(j,HEX);
+          Serial.print(" ");
           i++;
         }
       }
-      // Serial.println();
-      // Serial.print(t.number);
+
+      Serial.println();
+      Serial.print(t.number);
       coolTemp = t.number;
-      // Serial.println();
+      Serial.println();
     }
-    // Serial.println();
+    Serial.println();
   }
+  */
+  /*
   // PACKETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
   if(CAN.packetId() == 0x702) {
     Serial.print("ENGNSPEEDDDDDDD");
-    // Serial.print("Received ");
+    Serial.print("Received ");
     if (CAN.packetExtended()) {
-      // Serial.print("extended ");
+      Serial.print("extended ");
     }
     if (CAN.packetRtr()) {
       // Remote transmission request, packet contains no data
-      // Serial.print("RTR ");
+      Serial.print("RTR ");
     }
-    // Serial.print("packet with id ");
-    // Serial.print(CAN.packetId());
-    //// Serial.print(CAN.packetId(), HEX);
+
+    Serial.print("packet with id ");
+    Serial.print(CAN.packetId());
+    Serial.print(" and as hex ");
+    Serial.print(CAN.packetId(), HEX);
+
     if (CAN.packetRtr()) {
-      // Serial.print(" and requested length ");
-      // Serial.println(CAN.packetDlc());
+      Serial.print(" and requested length ");
+      Serial.println(CAN.packetDlc());
     } else {
-      // Serial.print(" and length ");
-      // Serial.println(packetSize);
+      Serial.print(" and length ");
+      Serial.println(packetSize);
       // only print packet data for non-RTR packets
       union data {
         uint32_t bits;
@@ -191,38 +201,43 @@ void onReceive(int packetSize) {
         uint32_t j = CAN.read();
         if(i < 4) {
           t.bits = (t.bits << 8) + j;
-          // Serial.print(j,HEX);
-          // Serial.print(" ");
+          Serial.print(j,HEX);
+          Serial.print(" ");
           i++;
         }
       }
-            // Serial.println();
-      // Serial.print(t.number);
+      Serial.println();
+      Serial.print(t.number);
       engnSpeed = t.number / 6;
-      // Serial.println();
+      Serial.println();
     }
-    // Serial.println();
+    Serial.println();
   }
+  */
+  /*
   // PACKETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
   if(CAN.packetId() == 0x703) {
     Serial.print("WHEELSPEEDDDDDD");
-    // Serial.print("Received ");
+    Serial.print("Received ");
     if (CAN.packetExtended()) {
-      // Serial.print("extended ");
+      Serial.print("extended ");
     }
     if (CAN.packetRtr()) {
       // Remote transmission request, packet contains no data
-      // Serial.print("RTR ");
+      Serial.print("RTR ");
     }
-    // Serial.print("packet with id ");
-    // Serial.print(CAN.packetId());
-    //// Serial.print(CAN.packetId(), HEX);
+
+    Serial.print("packet with id ");
+    Serial.print(CAN.packetId());
+    Serial.print(" and as hex ");
+    Serial.print(CAN.packetId(), HEX);
+
     if (CAN.packetRtr()) {
-      // // Serial.print(" and requested length ");
-      // // Serial.println(CAN.packetDlc());
+      Serial.print(" and requested length ");
+      Serial.println(CAN.packetDlc());
     } else {
-      // // Serial.print(" and length ");
-      // // Serial.println(packetSize);
+      Serial.print(" and length ");
+      Serial.println(packetSize);
       // only print packet data for non-RTR packets
       union data {
         uint32_t bits;
@@ -235,16 +250,17 @@ void onReceive(int packetSize) {
         uint32_t j = CAN.read();
         if(i < 4) {
           t.bits = (t.bits << 8) + j;
-          // // Serial.print(j,HEX);
-          // // Serial.print(" ");
+          Serial.print(j,HEX);
+          Serial.print(" ");
           i++;
         }
       }
-      // // Serial.println();
-      // // Serial.print(t.number);
+      Serial.println();
+      Serial.print(t.number);
       wheelSpeed = t.number;
-      // // Serial.println();
+      Serial.println();
     }
-    // // Serial.println();
+    Serial.println();
   }
+  */
 }
