@@ -1,15 +1,16 @@
 // Dashboard 2025 Code
 
 // These are the libraries:
-#include <CAN.h> // necessary for CAN Protocal communication commands
+#include <mcp_can.h> // necessary for CAN Protocal communication commands
 #include <SPI.h> // necessary for serial communication bewteen the SPI devices the MicroController 
                  // (lowkey might already be automatically downloaded)
 
 // Define the pins betweeen the MCP2515 Board and the MicroController
 #define MISO_Pin 12 // might need to rename w/ new update: MISO -> CIPO
 #define MOSI_Pin 11 // might need to rename w/ new update: MOSI -> COPI
-#define CS_Pin 10 
 #define SCK_Pin 13
+
+#define CS_Pin 10 
 #define INTRPT_Pin 9 // or 0
 
 // Introduce the variables (data metrics)
@@ -18,7 +19,7 @@ float coolTemp;
 float engnSpeed;
 float wheelSpeed;
 
-bool can_start = 1;
+bool can_start = 1; // 1=true
 
 void setup() {
 
@@ -29,8 +30,7 @@ void setup() {
   // Configure CAN Library
   CAN.setPins(CS_Pin, INTRPT_Pin);
   Serial.begin(9600);
-  Serial1.begin(9600); // Pick between the two
-  while (!Serial);
+  while (!Serial); 
   Serial.println("CAN Receiver Callback");
   CAN.setSPIFrequency(100000); //max MCP is 10MHz
   CAN.setClockFrequency(8E6)
