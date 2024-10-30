@@ -37,7 +37,7 @@ void setup() {
   
   // Start the CAN bus at 500 kbps
   if (!CAN.begin(250E3)) {
-    Serial.println("Startign CAN failed!");
+    Serial.println("Starting CAN failed!");
     while (1);
   } else {
     Serial.println("CAN Started");
@@ -63,204 +63,51 @@ void loop() {
 
 void onReceive(int packetSize) {
   // received a packet
-  Serial.println("onReceived function opened packet ID: ");
+  Serial.print("onReceived function opened packet ID: ");
   Serial.println(CAN.packetId());
-  /*
-  // PACKETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-  if(CAN.packetId() == 0x701) {
-    Serial.print("VOLTAGEEEEEE");
-    Serial.print("Received at 0x701");
-    
-    if (CAN.packetExtended()) {
+  Serial.print(" and as hex ");
+  Serial.print(CAN.packetId(), HEX);
+
+  if (CAN.packetId() == 0x700) {        Serial.println("COOLTEMPPPPPPPP");
+  } else if (CAN.packetId() == 0x701) { Serial.println("VOLTAGEEEEEEEEE");
+  } else if (CAN.packetId() == 0x702) { Serial.println("ENGNSPEEDDDDDDD");
+  } else if (CAN.packetId() == 0x703) { Serial.println("WHEELSPEEDDDDDD"); }
+
+  if (CAN.packetExtended()) {
       Serial.print("extended ");
-    }
-    if (CAN.packetRtr()) {
-      // Remote transmission request, packet contains no data
-      Serial.print("RTR ");
-    }
-    
-    Serial.print("packet with id ");
-    Serial.print(CAN.packetId());
-    Serial.print(" and as hex ");
-    Serial.print(CAN.packetId(), HEX);
-    
-    if (CAN.packetRtr()) {
-      Serial.print(" and requested length ");
-      Serial.println(CAN.packetDlc());
-    } else {
-      Serial.print(" and length ");
-      Serial.println(packetSize);
-      // only print packet data for non-RTR packets
-      union data {
-        uint32_t bits;
-        float number;
-      };
-      union data t;
-      t.bits = 0;
-      int i = 0;
-      while (CAN.available()) {
-        uint32_t j = CAN.read();
-        if(i < 4) {
-          t.bits = (t.bits << 8) + j;
-          Serial.print(j,HEX);
-          Serial.print(" ");
-          i++;
-        }
-      }
-      Serial.println();
-      Serial.print(t.number);
-      voltage = t.number;
-      Serial.println();
-    }
-    Serial.println();
   }
-  */
-  /*
-  // PACKETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-  if(CAN.packetId() == 0x700) {
-    Serial.print("COOLTEMPPPPPPPP");
-    Serial.print("Received at 0x700");
-    if (CAN.packetExtended()) {
-      Serial.print("extended ");
-    }
-    if (CAN.packetRtr()) {
-      // Remote transmission request, packet contains no data
-      Serial.print("RTR ");
+  if (CAN.packetRtr()) {
+    // Remote transmission request, packet contains no data
+    Serial.print("RTR and requested length ");
+    Serial.println(CAN.packetDlc());
+  } else { // only print packet data for non-RTR packets 
+    Serial.print(" and length ");
+    Serial.println(packetSize);
+    union data {
+      uint32_t bits;
+      float number;
+    };
+    union data t;
+    t.bits = 0;
+    int i = 0;
+    while (CAN.available()) {
+      uint32_t j = CAN.read();
+      if(i < 4) {
+        t.bits = (t.bits << 8) + j;
+        Serial.print(j,HEX);
+        Serial.print(" ");
+        i++;  
+      }  
     }
       
-    Serial.print("packet with id ");
-    Serial.print(CAN.packetId());
-    Serial.print(" and as hex ");
-    Serial.print(CAN.packetId(), HEX);
-
-    if (CAN.packetRtr()) {
-      Serial.print(" and requested length ");
-      Serial.println(CAN.packetDlc());
-    } else {
-      Serial.print(" and length ");
-      Serial.println(packetSize);
-      // only print packet data for non-RTR packets
-      union data {
-        uint32_t bits;
-        float number;
-      };
-      union data t;
-      t.bits = 0;
-      int i = 0;
-      while (CAN.available()) {
-        uint32_t j = CAN.read();
-        if(i < 4) {
-          t.bits = (t.bits << 8) + j;
-          Serial.print(j,HEX);
-          Serial.print(" ");
-          i++;
-        }
-      }
-
-      Serial.println();
-      Serial.print(t.number);
-      coolTemp = t.number;
-      Serial.println();
-    }
+    Serial.println();
+    Serial.print(t.number);
+    if (CAN.packetId() == 0x700) {        voltage = t.number;   
+    } else if (CAN.packetId() == 0x701) { voltage = t.number;
+    } else if (CAN.packetId() == 0x702) { engnSpeed = t.number / 6;
+    } else if (CAN.packetId() == 0x703) { wheelSpeed = t.number; }
+    voltage = t.number;
     Serial.println();
   }
-  */
-  /*
-  // PACKETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-  if(CAN.packetId() == 0x702) {
-    Serial.print("ENGNSPEEDDDDDDD");
-    Serial.print("Received ");
-    if (CAN.packetExtended()) {
-      Serial.print("extended ");
-    }
-    if (CAN.packetRtr()) {
-      // Remote transmission request, packet contains no data
-      Serial.print("RTR ");
-    }
-
-    Serial.print("packet with id ");
-    Serial.print(CAN.packetId());
-    Serial.print(" and as hex ");
-    Serial.print(CAN.packetId(), HEX);
-
-    if (CAN.packetRtr()) {
-      Serial.print(" and requested length ");
-      Serial.println(CAN.packetDlc());
-    } else {
-      Serial.print(" and length ");
-      Serial.println(packetSize);
-      // only print packet data for non-RTR packets
-      union data {
-        uint32_t bits;
-        float number;
-      };
-      union data t;
-      t.bits = 0;
-      int i = 0;
-      while (CAN.available()) {
-        uint32_t j = CAN.read();
-        if(i < 4) {
-          t.bits = (t.bits << 8) + j;
-          Serial.print(j,HEX);
-          Serial.print(" ");
-          i++;
-        }
-      }
-      Serial.println();
-      Serial.print(t.number);
-      engnSpeed = t.number / 6;
-      Serial.println();
-    }
-    Serial.println();
-  }
-  */
-  /*
-  // PACKETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-  if(CAN.packetId() == 0x703) {
-    Serial.print("WHEELSPEEDDDDDD");
-    Serial.print("Received ");
-    if (CAN.packetExtended()) {
-      Serial.print("extended ");
-    }
-    if (CAN.packetRtr()) {
-      // Remote transmission request, packet contains no data
-      Serial.print("RTR ");
-    }
-
-    Serial.print("packet with id ");
-    Serial.print(CAN.packetId());
-    Serial.print(" and as hex ");
-    Serial.print(CAN.packetId(), HEX);
-
-    if (CAN.packetRtr()) {
-      Serial.print(" and requested length ");
-      Serial.println(CAN.packetDlc());
-    } else {
-      Serial.print(" and length ");
-      Serial.println(packetSize);
-      // only print packet data for non-RTR packets
-      union data {
-        uint32_t bits;
-        float number;
-      };
-      union data t;
-      t.bits = 0;
-      int i = 0;
-      while (CAN.available()) {
-        uint32_t j = CAN.read();
-        if(i < 4) {
-          t.bits = (t.bits << 8) + j;
-          Serial.print(j,HEX);
-          Serial.print(" ");
-          i++;
-        }
-      }
-      Serial.println();
-      Serial.print(t.number);
-      wheelSpeed = t.number;
-      Serial.println();
-    }
-    Serial.println();
-  }
-  */
+  Serial.println();
 }
