@@ -6,12 +6,13 @@
                  // (lowkey might already be automatically downloaded)
 
 // Define the pins betweeen the MCP2515 Board and the MicroController
-#define MISO_Pin 12 // might need to rename w/ new update: MISO -> CIPO
-#define MOSI_Pin 11 // might need to rename w/ new update: MOSI -> COPI
-#define SCK_Pin 13
+//#define MISO_Pin 12 // might need to rename w/ new update: MISO -> CIPO
+//#define MOSI_Pin 11 // might need to rename w/ new update: MOSI -> COPI
+//#define SCK_Pin 13
 
 #define CS_Pin 10 
 #define INTRPT_Pin 9 // or 0
+MCP_CAN CAN(CS_Pin);
 
 // Introduce the variables (data metrics)
 float voltage;
@@ -19,7 +20,7 @@ float coolTemp;
 float engnSpeed;
 float wheelSpeed;
 
-bool can_start = 1; // 1=true
+bool can_start = true; // 1=true
 
 void setup() {
 
