@@ -44,16 +44,23 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  if (can_start){
-    while(!CAN.begin(250E3)){
-      Serial.println("CAN Failed")
-      delay(100);
+  // Re-attempt initialization if CAN fails
+  if (!can_start) {
+    if (CAN.begin(MCP_ANY, CAN_250KBPS, MCP_8MHZ) == CAN_OK) {
+      Serial.println("CAN Re-initialized Successfully!");
+      CAN.setMode(MCP_NORMAL);
+      can_start = true;
     }
-  } else {
-    can_start = 0;
   }
-  // Read, reformat, and print data to Dashboard
+
+  // READ: Check for incoming CAN messages
+  if (CAN.checkReceive() == CAN_MSGAVAIL) {
+    readCANMessage();  // Process the incoming message
+  } else {
+    Serial.println("No CAN message available");
+  }
+
+  // REFORMAT
 }
 
 void onReceive(int packetSize) {
@@ -78,19 +85,19 @@ void onReceive(int packetSize) {
   } else { // only print packet data for non-RTR packets 
     Serial.print(" and length ");
     Serial.println(packetSize);
+    // convert CAN buffer to float
     union data {
       uint32_t bits;
       float number;
-    };
-    union data t;
+    } t;
     t.bits = 0;
     int i = 0;
     while (CAN.available()) {
       uint32_t j = CAN.read();
       if(i < 4) {
         t.bits = (t.bits << 8) + j;
-        Serial.print(j,HEX);
-        Serial.print(" ");
+        // Serial.print(j,HEX);
+        // Serial.print(" ");
         i++;  
       }  
     }
@@ -105,4 +112,41 @@ void onReceive(int packetSize) {
     Serial.println();
   }
   Serial.println();
+}
+
+// Function to read and process incoming CAN messages
+void readCANMessage() {
+  long unsigned int rxId;
+  unsigned char len = 0;
+  unsigned char buf[8];
+
+  CAN.readMsgBuf(&rxId, &len, buf);  // Read CAN message
+
+  // Process CAN message based on ID
+  if (rxId == 0x701) {
+    voltage = extractFloatFromBuffer(buf);
+  } else if (rxId == 0x700) {
+    coolTemp = extractFloatFromBuffer(buf);
+  } else if (rxId == 0x702) {
+    engnSpeed = extractFloatFromBuffer(buf) / 6;  // Convert engine speed
+    Serial.print("Engine Speed (RPM): ");
+    Serial.println(engnSpeed); // Debug output for RPM
+  } else if (rxId == 0x703) {
+    wheelSpeed = extractFloatFromBuffer(buf);
+  }
+}
+
+
+// Helper function to convert CAN buffer to float
+float extractFloatFromBuffer(unsigned char* buf) {
+  union {
+    uint32_t bits;
+    float number;
+  } data;
+
+  data.bits = 0;
+  for (int i = 0; i < 4; i++) {
+    data.bits = (data.bits << 8) | buf[i];
+  }
+  return data.number;
 }
