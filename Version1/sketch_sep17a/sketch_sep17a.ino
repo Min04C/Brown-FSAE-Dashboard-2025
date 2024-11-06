@@ -1,6 +1,4 @@
 // Dashboard 2025 Code
-
-// These are the libraries:
 #include <mcp_can.h> // necessary for CAN Protocal communication commands
 #include <SPI.h> // necessary for serial communication bewteen the SPI devices the MicroController 
                  // (lowkey might already be automatically downloaded)
@@ -9,10 +7,9 @@
 //#define MISO_Pin 12 // might need to rename w/ new update: MISO -> CIPO
 //#define MOSI_Pin 11 // might need to rename w/ new update: MOSI -> COPI
 //#define SCK_Pin 13
-
 #define CS_Pin 10 
 #define INTRPT_Pin 9 // or 0
-MCP_CAN CAN(CS_Pin);
+
 
 // Introduce the variables (data metrics)
 float voltage;
@@ -24,27 +21,24 @@ bool can_start = true; // 1=true
 
 void setup() {
 
-  // Input, Output pins
-  pinMode(CS_Pin, OUTPUT); 
-  pinModeINTRPT_Pin, INPUT); // can library attaches its own interrup to pin
-
+  MCP_CAN CAN(CS_Pin);  
   // Configure CAN Library
-  CAN.setPins(CS_Pin, INTRPT_Pin);
   Serial.begin(9600);
   while (!Serial); 
+  
   Serial.println("CAN Receiver Callback");
   CAN.setSPIFrequency(100000); //max MCP is 10MHz
   CAN.setClockFrequency(8E6)
   
-  // Start the CAN bus at 500 kbps
-  if (!CAN.begin(250E3)) {
-    Serial.println("Starting CAN failed!");
-    while (1);
+  if (CAN.begin(MCP_ANY, CAN_250KBPS, MCP_8MHZ) == CAN_OK) {
+    Serial.println("CAN Initialized Successfully!");
+    CAN.setMode(MCP_NORMAL);  // Set CAN to normal mode for receiving
+    can_start = true;
   } else {
-    Serial.println("CAN Started");
-    can_start = 0;
+    Serial.println("Error Initializing CAN...");
+    can_start = false;
+    while (1);  // Hang if initialization fails
   }
-
   // Register the receive callback
   CAN.onReceive(onReceive);
 }
